@@ -1,0 +1,14 @@
+.App {
+  text-align: 'center';
+  display: flex;
+  justify-content: center;
+}
+
+.Button1 {
+  margin-top: 25%;
+}
+
+.Button2 {
+  margin-top: 25%;
+  margin-left: 5%;
+}
