@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Route, Switch} from 'react-router-dom';
 import CreateForm from './components/Create/CreateForm';
+import EditForm from './components/edit/EditForm';
 import Buttons from './components/Buttons';
 import ViewForm from './components/ViewForm/ViewForm';
 
@@ -23,6 +24,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Buttons} />
           <Route  path='/createform' component={CreateForm} />
+          <Route  path='/editform/:id' component={EditForm} />
           <Route  path='/viewform' component={ViewForm}/>
         </Switch>
       </div>

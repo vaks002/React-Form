@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import Input from '../Input/Input';
-import './CreateForm.css';
+import './EditForm.css';
 import axios from '../../axios-create';
 
 class CreateFrom extends Component {
@@ -127,6 +127,17 @@ class CreateFrom extends Component {
         return isValid;
     }
 
+    componentWillMount() {
+        const newForm = {
+            ...this.state.createForm
+        }
+        axios.get('./info/'+this.props.match.params["id"]+'.json').then(res=>{
+           Object.keys(res.data).map((key) => {
+                newForm[key].value = res.data[key];
+            });
+            this.setState({createForm: newForm});
+        })
+    }
     submitHandler = (event) => {
         event.preventDefault();
         this.setState({loading: true});
@@ -135,9 +146,9 @@ class CreateFrom extends Component {
             formData[key] = this.state.createForm[key].value;
         }
 
-        axios.post('/info.json', formData).then(response=>{
+        axios.put('/info/'+this.props.match.params["id"]+'.json', formData).then(response=>{
             this.setState({loading: false});
-            this.props.history.push('/');
+            this.props.history.push('/viewform');
         }).catch(error=>{
             this.setState({loading: false});
         });
@@ -173,13 +184,12 @@ class CreateFrom extends Component {
                 config: this.state.createForm[key]  
             });
         }
-
+        console.log(formElementArray);
         let form = (
             <form onSubmit={this.submitHandler}>
                 {formElementArray.map(formArray => (
                     <Input 
                            key={formArray.id}
-                        //    label={formArray.config.elementConfig.placeholder}
                            elementType={formArray.config.elementType}
                            elementConfig={formArray.config.elementConfig}
                            value={formArray.config.value}
@@ -188,7 +198,7 @@ class CreateFrom extends Component {
                            touched={formArray.config.touched}
                            changed={(event) => this.inputChangedHandler(event, formArray.id)} />
                 ))} 
-                    <Button outline color='primary' disabled={!this.state.formIsValid}>Submit Form</Button> 
+                    <Button outline color='primary' disabled={this.state.formIsValid}>Submit Form</Button> 
                </form>
         );
 
